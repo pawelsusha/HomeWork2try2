@@ -35,6 +35,10 @@ app.get('/addresses/:id', (req:Request, res: Response ) => {
     }
 })
 
+app.get('/', (req, res) => {
+    res.send('Hello MyProfitBook World!')
+})
+
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
