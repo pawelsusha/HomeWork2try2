@@ -3,7 +3,7 @@ import express, { Request, Response } from 'express'
 const app = express()
 const port = 3000
 
-const products = [{id: 1, title:'tomato'},{id: 2, title:'orange'}]
+const products = [{id: 1, title:'tomato'},{id: 2, title:'orange'},{id: 3, title:'orange3'}]
 const addresses = [{id: 1, value:'adr1'},{id: 2, value:'adr2'}]
 
 app.get('/products', (req:Request, res: Response ) => {
