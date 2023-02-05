@@ -1,5 +1,5 @@
 {
-  "name": "cra-console",
+  "name": "express-videos-vercel",
   "version": "1.0.0",
   "main": "src/index.ts",
   "author": "pawelsusha <pawelsusha@gmail.com>",
