@@ -34,87 +34,172 @@ const videosDataBase = [
     }
 ];
 const availableResolutions = ["P144", "P240", "P360", "P480", "P720", "P1080", "P1440", "P2160"];
-//#1 Delete All Data
+//#1 Delete All Data OK+
 app.delete('/testing/all-data', (req, res) => {
     videosDataBase.splice(0, videosDataBase.length);
     res.send(204);
 });
-//#2 Get All Videos
-app.get('/videos', (req, res) => {
-    res.send(videosDataBase);
-    res.send(200);
-});
-// #3 Post Videos
-app.post('/videos', (req, res) => {
-    let newVideo = {
-        id: +(new Date()),
-        title: req.body.title,
-        author: "Waczowski Bros",
-        canBeDownloaded: req.body.canBeDownloaded,
-        minAgeRestriction: req.body.minAgeRestriction,
-        createdAt: req.body.dateTime,
-        publicationDate: req.body.publicationDate,
-        availableResolutions: req.body.availableResolutions,
-    };
-    videosDataBase.push(newVideo);
-    res.send(201).send(newVideo);
-});
-app.get('/products', (req, res) => {
-    if (req.query.title) {
-        let SearchString = req.query.title.toString();
-        res.send(products.filter(p => p.title.indexOf(SearchString) > -1));
-    }
-    else { }
-    res.send(products);
-});
-app.get('/products', (req, res) => {
-    if (req.query.title) {
-        let SearchString = req.query.title.toString();
-        res.send(products.filter(p => p.title.indexOf(SearchString) > -1));
-    }
-    else { }
-    res.send(products);
-});
-app.get('/products/:id', (req, res) => {
-    let product = products.find(p => p.id === +req.params.id);
-    if (product) {
-        res.send(product);
-    }
-    else {
-        res.send(404);
-    }
-});
-app.put('/products/:id', (req, res) => {
-    let product = products.find(p => p.id === +req.params.id);
-    if (product) {
-        product.title = req.body.title;
-        res.send(product);
-    }
-    else {
-        res.send(404);
-    }
-});
-app.delete('/products/:id', (req, res) => {
-    for (let i = 0; i < products.length; i++) {
-        if (products[i].id === +req.params.id) {
-            products.splice(i, 1);
+//#2 Delete By ID +
+app.delete('/videos/:id', (req, res) => {
+    for (let i = 0; i < videosDataBase.length; i++) {
+        if (videosDataBase[i].id === +req.params.id) {
+            videosDataBase.splice(i, 1);
             res.send(204);
             return;
         }
     }
     res.send(404);
 });
-app.get('/addresses', (req, res) => {
-    res.send(addresses);
+//#3 Get All Videos +
+app.get('/videos', (req, res) => {
+    res.send(videosDataBase);
+    //res.send(200);
 });
-app.get('/addresses/:id', (req, res) => {
-    let address = addresses.find(p => p.id === +req.params.id);
-    if (address) {
-        res.send(address);
+//#4 Get All Videos by ID +
+app.get('/videos/:id', (req, res) => {
+    let video = videosDataBase.find(v => v.id === +req.params.id);
+    if (video) {
+        res.send(video);
     }
     else {
         res.send(404);
     }
+});
+// #5 Post (create) Videos ?
+app.post('/videos', (req, res) => {
+    let newVideo = {
+        id: +(new Date()),
+        title: req.body.title,
+        author: req.body.author,
+        canBeDownloaded: req.body.canBeDownloaded,
+        minAgeRestriction: req.body.minAgeRestriction,
+        createdAt: (new Date().toISOString()),
+        publicationDate: (new Date(new Date().setDate(new Date().getDate() + 1)).toISOString()),
+        availableResolutions: req.body.availableResolutions
+    };
+    let errors_array = [];
+    //start checking
+    //title
+    if (typeof (newVideo === null || newVideo === void 0 ? void 0 : newVideo.title) !== "string" || newVideo.title.length > 40) {
+        errors_array.push({ message: "error", field: "title" });
+    }
+    //author
+    if (typeof (newVideo === null || newVideo === void 0 ? void 0 : newVideo.author) !== "string" || newVideo.author.length > 20) {
+        errors_array.push({ message: "error", field: "author" });
+    }
+    //availableResolutions
+    if (Array.isArray(newVideo === null || newVideo === void 0 ? void 0 : newVideo.availableResolutions)) {
+        const length = newVideo === null || newVideo === void 0 ? void 0 : newVideo.availableResolutions.length;
+        let checking = newVideo === null || newVideo === void 0 ? void 0 : newVideo.availableResolutions.filter(value => {
+            return availableResolutions.includes(value);
+        });
+        if (checking.length < length) {
+            errors_array.push({ message: "error", field: "availableResolutions" });
+        }
+    }
+    else {
+        errors_array.push({ message: "error", field: "availableResolutions" });
+    }
+    //canBeDownloaded
+    if (typeof (newVideo === null || newVideo === void 0 ? void 0 : newVideo.canBeDownloaded) !== "boolean") {
+        if ((newVideo === null || newVideo === void 0 ? void 0 : newVideo.canBeDownloaded) === undefined) {
+            newVideo.canBeDownloaded = false;
+        }
+        else {
+            errors_array.push({ message: "error", field: "canBeDownloaded" });
+        }
+    }
+    //minAgeRestriction
+    if ((newVideo === null || newVideo === void 0 ? void 0 : newVideo.minAgeRestriction) !== null && typeof (newVideo === null || newVideo === void 0 ? void 0 : newVideo.minAgeRestriction) !== "number") {
+        if ((newVideo === null || newVideo === void 0 ? void 0 : newVideo.minAgeRestriction) === undefined) {
+            newVideo.minAgeRestriction = null;
+        }
+        else {
+            errors_array.push({ message: "error", field: "minAgeRestriction" });
+        }
+    }
+    else if (typeof (newVideo === null || newVideo === void 0 ? void 0 : newVideo.minAgeRestriction) === "number") {
+        if (+(newVideo === null || newVideo === void 0 ? void 0 : newVideo.minAgeRestriction) < 1 || +(newVideo === null || newVideo === void 0 ? void 0 : newVideo.minAgeRestriction) > 18) {
+            errors_array.push({ message: "error", field: "minAgeRestriction" });
+        }
+    }
+    //endpoint
+    if (errors_array.length > 0) {
+        let errorsList = { errorsMessages: errors_array };
+        res.status(400).send(errorsList);
+    }
+    else {
+        videosDataBase.push(newVideo);
+        res.status(201).send(newVideo);
+    }
+});
+// #6 PUT (Update) Videos by ID?
+app.put('/videos/:id', (req, res) => {
+    let newVideo = videosDataBase.find(p => p.id === +req.params.id);
+    let index = videosDataBase.findIndex(p => p.id === +req.params.id);
+    let errors_array = [];
+    //add by value
+    if (newVideo) {
+        newVideo = Object.assign(Object.assign({}, newVideo), req.body);
+        //check for correct data
+        //title
+        if (typeof (newVideo === null || newVideo === void 0 ? void 0 : newVideo.title) !== "string" || newVideo.title.length > 40) {
+            errors_array.push({ message: "error", field: "title" });
+        }
+        //author
+        if (typeof (newVideo === null || newVideo === void 0 ? void 0 : newVideo.author) !== "string" || newVideo.author.length > 20) {
+            errors_array.push({ message: "error", field: "author" });
+        }
+        //availableResolutions
+        if (Array.isArray(newVideo === null || newVideo === void 0 ? void 0 : newVideo.availableResolutions)) {
+            const length = newVideo === null || newVideo === void 0 ? void 0 : newVideo.availableResolutions.length;
+            let checking = newVideo === null || newVideo === void 0 ? void 0 : newVideo.availableResolutions.filter(value => {
+                return availableResolutions.includes(value);
+            });
+            if (checking.length < length) {
+                errors_array.push({ message: "error", field: "availableResolutions" });
+            }
+        }
+        else {
+            errors_array.push({ message: "error", field: "availableResolutions" });
+        }
+        //canBeDownloaded
+        if (typeof (newVideo === null || newVideo === void 0 ? void 0 : newVideo.canBeDownloaded) !== "boolean") {
+            errors_array.push({ message: "error", field: "canBeDownloaded" });
+        }
+        //minAgeRestriction
+        if ((newVideo === null || newVideo === void 0 ? void 0 : newVideo.minAgeRestriction) !== null && typeof (newVideo === null || newVideo === void 0 ? void 0 : newVideo.minAgeRestriction) !== "number") {
+            errors_array.push({ message: "error", field: "minAgeRestriction" });
+        }
+        else if (typeof (newVideo === null || newVideo === void 0 ? void 0 : newVideo.minAgeRestriction) === "number") {
+            if (+(newVideo === null || newVideo === void 0 ? void 0 : newVideo.minAgeRestriction) < 1 || +(newVideo === null || newVideo === void 0 ? void 0 : newVideo.minAgeRestriction) > 18) {
+                errors_array.push({ message: "error", field: "minAgeRestriction" });
+            }
+        }
+        //publicationDate
+        if (typeof (newVideo === null || newVideo === void 0 ? void 0 : newVideo.publicationDate) === "string") {
+            let r = /^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/;
+            if (!r.test(newVideo.publicationDate)) {
+                errors_array.push({ message: "error", field: "publicationDate" });
+            }
+        }
+        else {
+            errors_array.push({ message: "error", field: "publicationDate" });
+        }
+        //assigment to variable
+        if (errors_array.length > 0) {
+            let errorsList = { errorsMessages: errors_array };
+            res.status(400).send(errorsList);
+        }
+        else {
+            videosDataBase[index] = newVideo;
+            res.send(204);
+        }
+    }
+    else {
+        res.send(404);
+    }
+    ;
 });
 app.get('/', (req, res) => {
     res.send('Video list Base');
