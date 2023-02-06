@@ -34,17 +34,38 @@ const videosDataBase = [
 
 const availableResolutions = ["P144", "P240", "P360", "P480", "P720", "P1080", "P1440", "P2160"]
 
-//#1 Delete All Data
+//#1 Delete All Data OK
 app.delete('/testing/all-data', (req:Request, res: Response ) => {
     videosDataBase.splice(0,videosDataBase.length);
     res.send(204);
 })
-//#2 Get All Videos
+//#2 Delete By ID
+app.delete('/videos/:id', (req:Request, res: Response ) => {
+    for (let i = 0; i < videosDataBase.length; i++) {
+        if (videosDataBase[i].id === +req.params.id) {
+            videosDataBase.splice(i, 1);
+            res.send(204);
+            return;
+        }
+    }
+    res.send(404);
+})
+
+//#3 Get All Videos ?OK?
 app.get('/videos', (req:Request, res: Response ) => {
     res.send(videosDataBase)
-    res.send(200);
+    //res.send(200);
 })
-// #3 Post Videos
+//#4 Get All Videos by ID ?
+app.get('/videos/:id', (req:Request, res: Response ) => {
+    let product = products.find(p =>p.id === +req.params.id)
+    if (product) {
+        res.send(product)
+    } else {
+        res.send(404)
+    }
+})
+// #4 Post Videos ?
 app.post('/videos', (req:Request, res: Response ) => {
     let newVideo = {
         id: +(new Date()),
@@ -59,30 +80,8 @@ app.post('/videos', (req:Request, res: Response ) => {
     videosDataBase.push(newVideo)
     res.send(201).send(newVideo)
 })
-app.get('/products', (req:Request, res: Response ) => {
-    if (req.query.title) {
-        let SearchString = req.query.title.toString()
-        res.send(products.filter(p => p.title.indexOf(SearchString) > -1))
-    } else {}
-    res.send(products)
-})
-app.get('/products', (req:Request, res: Response ) => {
-    if (req.query.title) {
-        let SearchString = req.query.title.toString()
-        res.send(products.filter(p => p.title.indexOf(SearchString) > -1))
-    } else {}
-    res.send(products)
-})
-
-app.get('/products/:id', (req:Request, res: Response ) => {
-    let product = products.find(p =>p.id === +req.params.id)
-    if (product) {
-        res.send(product)
-    } else {
-        res.send(404)
-    }
-})
-app.put('/products/:id', (req:Request, res: Response ) => {
+// #4 PUT Videos by ID?
+app.put('/videos/:id', (req:Request, res: Response ) => {
     let product = products.find(p =>p.id === +req.params.id)
     if (product) {
         product.title = req.body.title
@@ -91,29 +90,7 @@ app.put('/products/:id', (req:Request, res: Response ) => {
         res.send(404)
     }
 })
-app.delete('/products/:id', (req:Request, res: Response ) => {
-    for (let i = 0; i < products.length; i++) {
-        if (products[i].id === +req.params.id) {
-            products.splice(i, 1);
-            res.send(204);
-            return;
-        }
-    }
-    res.send(404);
-})
 
-
-app.get('/addresses', (req:Request, res: Response ) => {
-    res.send(addresses)
-})
-app.get('/addresses/:id', (req:Request, res: Response ) => {
-    let address = addresses.find(p =>p.id === +req.params.id)
-    if (address) {
-        res.send(address)
-    } else {
-        res.send(404)
-    }
-})
 app.get('/', (req, res) => {
     res.send('Video list Base')
 })
