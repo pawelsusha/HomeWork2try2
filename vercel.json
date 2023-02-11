@@ -1,7 +1,6 @@
 {
   "version": 2,
-  "name": "express-videos-vercel",
-  "builds": [
+   "builds": [
     { "src": "src/index.ts", "use": "@vercel/node" }
   ],
   "routes": [
