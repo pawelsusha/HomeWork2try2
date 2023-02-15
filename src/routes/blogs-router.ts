@@ -1,15 +1,8 @@
 import {Request, Response, Router} from "express";
 import {blogsRepository} from "../repositories/blogs-repository";
-export const blogsRouter = Router({})
+import {blogs} from "../repositories/blogs-repository";
 
-const blogs = [
-  {
-    id: 1,
-    name: "string",
-    description: "string",
-    websiteUrl: "string"
-  }
-]
+export const blogsRouter = Router({})
 
 blogsRouter.get('/', (req:Request, res: Response ) => {
     res.send(blogs)
