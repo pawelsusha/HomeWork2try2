@@ -27,12 +27,12 @@ exports.postsRouter.get('/:id', (req, res) => {
     }
 });
 //Create Post  + Auth
-exports.postsRouter.post('/', exports.adminAuth, InputValidationMiddleWare_1.postValidationMiddleware, InputValidationMiddleWare_1.inputValidationMiddleWare, (req, res) => {
+exports.postsRouter.post('/', exports.adminAuth, InputValidationMiddleWare_1.postValidationMiddleware, (req, res) => {
     const newPost = posts_repository_1.postsRepository.createPost(req.body, req.body.blog.Name);
     res.status(201).send(newPost);
 });
 //Update Post By ID + Auth
-exports.postsRouter.put('/:id', exports.adminAuth, InputValidationMiddleWare_1.postValidationMiddleware, InputValidationMiddleWare_1.inputValidationMiddleWare, (req, res) => {
+exports.postsRouter.put('/:id', exports.adminAuth, InputValidationMiddleWare_1.postValidationMiddleware, (req, res) => {
     const isUpdated = posts_repository_1.postsRepository.updatePost(+req.params.id, req.body);
     if (isUpdated) {
         const post = posts_repository_1.postsRepository.getPostById(+req.params.id);

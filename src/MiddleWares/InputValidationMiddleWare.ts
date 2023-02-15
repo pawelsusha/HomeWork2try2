@@ -15,8 +15,8 @@ export  const findByIdBlogs : CustomValidator = value => {
 };
 
 
-// @ts-ignore
-export const inputValidationMiddleWare = (req: Request, res: Response, next: NextFunction) => {
+
+/*export const inputValidationMiddleWare = (req: Request, res: Response, next: NextFunction) => {
     const error = validationResult(req)
     if (!error.isEmpty()) {
         return res.status(400).send({
@@ -29,7 +29,7 @@ export const inputValidationMiddleWare = (req: Request, res: Response, next: Nex
         })
     }
     next()
-}
+}*/
 export const blogValidationMiddleware = [
     body('name').trim().isLength({min: 1, max: 15}).isString(),
     body('description').trim().isLength({min: 1, max: 500}).isString(),
