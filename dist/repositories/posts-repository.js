@@ -1,60 +1,64 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.postsRepository = void 0;
-const posts = [
+exports.postsRepository = exports.posts = void 0;
+exports.posts = [
     {
         id: 1,
-        title: "string",
+        title: "11111",
         shortDescription: "string",
         content: "string",
         blogId: "string",
-        blogName: "string"
+        blogName: "string",
+        createdAt: "string"
     },
     {
         id: 2,
-        title: "string",
+        title: "6666",
         shortDescription: "string",
         content: "string",
         blogId: "string",
-        blogName: "string"
+        blogName: "string",
+        createdAt: "string"
     },
     {
         id: 3,
-        title: "string",
+        title: "6666",
         shortDescription: "string",
         content: "string",
         blogId: "string",
-        blogName: "string"
+        blogName: "string",
+        createdAt: "string"
     }
 ];
 exports.postsRepository = {
     findPosts(title) {
         if (title) {
-            let filteredPosts = (posts.filter(p => p.title.indexOf(title) > -1));
+            let filteredPosts = (exports.posts.filter(p => p.title.indexOf(title) > -1));
             return filteredPosts;
         }
         else {
-            return posts;
+            return exports.posts;
         }
     },
     getPostById(id) {
-        let post = posts.find(p => p.id === id);
+        let post = exports.posts.find(p => p.id === id);
         return post;
     },
-    createPost(title) {
+    createPost(post, blogName) {
         const newPost = {
             id: +(new Date()),
-            title: title,
-            shortDescription: "string",
-            content: "string",
-            blogId: "string",
-            blogName: "string"
+            title: post.title,
+            shortDescription: post.shortDescription,
+            content: post.content,
+            blogId: post.blogId,
+            blogName: blogName,
+            createdAt: "" + new Date()
         };
-        posts.push(newPost);
+        exports.posts.push(newPost);
         return newPost;
     },
     updatePost(id, title) {
-        let post = posts.find(p => p.id === id);
+        let post = exports.posts.find(p => p.id === id);
         if (post) {
             post.title = title;
             return true;
@@ -64,9 +68,9 @@ exports.postsRepository = {
         }
     },
     deletePost(id) {
-        for (let i = 0; i < posts.length; i++) {
-            if (posts[i].id === id) {
-                posts.splice(i, 1);
+        for (let i = 0; i < exports.posts.length; i++) {
+            if (exports.posts[i].id === id) {
+                exports.posts.splice(i, 1);
                 return true;
             }
         }

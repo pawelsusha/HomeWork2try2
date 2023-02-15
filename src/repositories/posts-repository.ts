@@ -1,30 +1,34 @@
 import {Request, Response} from "express";
 import {postsRouter} from "../routes/posts-router";
+import {Post} from "../types/types";
 
-const posts = [
+export const posts = [
     {
         id: 1,
-        title: "string",
+        title: "11111",
         shortDescription: "string",
         content: "string",
         blogId: "string",
-        blogName: "string"
+        blogName: "string",
+        createdAt: "string"
     },
     {
         id: 2,
-        title: "string",
+        title: "6666",
         shortDescription: "string",
         content: "string",
         blogId: "string",
-        blogName: "string"
+        blogName: "string",
+        createdAt: "string"
     }
     ,{
         id: 3,
-        title: "string",
+        title: "6666",
         shortDescription: "string",
         content: "string",
         blogId: "string",
-        blogName: "string"
+        blogName: "string",
+        createdAt: "string"
     }
 ]
 
@@ -42,14 +46,15 @@ export const postsRepository = {
         return post;
 
     },
-    createPost(title: string) {
+    createPost(post: Post, blogName: string) {
         const newPost = {
             id: +(new Date()),
-            title: title,
-            shortDescription: "string",
-            content: "string",
-            blogId: "string",
-            blogName: "string"
+            title: post.title,
+            shortDescription: post.shortDescription,
+            content: post.content,
+            blogId: post.blogId,
+            blogName: blogName,
+            createdAt : "" + new Date()
         }
         posts.push(newPost)
         return newPost
