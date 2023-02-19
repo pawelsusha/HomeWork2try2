@@ -27,7 +27,7 @@ export const blogsRepository = {
         }
     },
     getBlogsById(id: number) {
-        let blog = blogs.find(p =>p.id === id)
+        let blog = blogs.find(b => b.id === id)
         return blog;
 
     },
@@ -42,7 +42,7 @@ export const blogsRepository = {
         return newBlog
     },
     updateBlog(id: number, name: string) {
-        let blog = blogs.find(p => p.id === id)
+        let blog = blogs.find(b => b.id === id)
         if (blog) {
             blog.name = name
             return true;
