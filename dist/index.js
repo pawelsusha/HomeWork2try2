@@ -14,11 +14,8 @@ const app = (0, express_1.default)();
 const port = 3000;
 const parserMiddleware = (0, body_parser_1.default)({});
 app.use(parserMiddleware);
-app.use(auth_middleware_1.authMiddleware);
 //app.use
-/*export const titleValidation = body('title').trim().isLength({min: 3, max: 10}).withMessage('ERORRR TITLE 3-10 MAX');
-export const basicAuth = require('express-basic-auth')
-export const adminAuth = basicAuth({users: { 'admin': 'qwerty' }});*/
+//export const titleValidation = body('title').trim().isLength({min: 3, max: 10}).withMessage('ERORRR TITLE 3-10 MAX');
 /*const authMiddleWare = (req:Request, res: Response, next: NextFunction ) => {
     if (req.query.token === "qwerty") {
         next();
@@ -27,7 +24,7 @@ export const adminAuth = basicAuth({users: { 'admin': 'qwerty' }});*/
     }
 }*/
 //#1 Delete All Data OK+
-app.delete('/testing/all-data', (req, res) => {
+app.delete('/testing/all-data', auth_middleware_1.adminAuth, (req, res) => {
     blogs_repository_1.blogs.splice(0, blogs_repository_1.blogs.length);
     posts_repository_1.posts.splice(0, posts_repository_1.posts.length);
     res.send(204);

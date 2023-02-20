@@ -4,12 +4,9 @@ import {blogs} from "../repositories/blogs-repository";
 import {postsRepository} from "../repositories/posts-repository";
 import {Blog} from "../types/types";
 import {Post} from "../types/types";
-import {authMiddleware} from "../MiddleWares/auth-middleware";
+import {adminAuth, } from "../MiddleWares/auth-middleware";
+
 export const blogsRouter = Router({})
-
-
-
-
 
 blogsRouter.get('/', (req:Request, res: Response ) => {
     const foundedBlogs = blogsRepository.findBlogs(req.query.title
@@ -25,7 +22,7 @@ blogsRouter.get('/', (req:Request, res: Response ) => {
         res.send(404)
     }
 })
-.delete('/:id', (req:Request, res: Response) => {
+.delete('/:id', adminAuth,(req:Request, res: Response) => {
     const id = +req.params.blogId;
     const isDeleted = blogsRepository.deleteBlog(id)
     if (isDeleted){
@@ -33,12 +30,12 @@ blogsRouter.get('/', (req:Request, res: Response ) => {
     }else
         res.send(404)
 })
-.post('/', (req:Request, res:Response) => {
+.post('/',adminAuth, (req:Request, res:Response) => {
     const newBlog = blogsRepository.createBLog(req.body.title)
 
     res.status(201).send(newBlog)
 })
-.put('/', (req:Request, res:Response) => {
+.put('/',adminAuth, (req:Request, res:Response) => {
     const id = +req.params.id
     const title = req.body.name
     const isUpdated = blogsRepository.updateBlog(id, req.body.name)

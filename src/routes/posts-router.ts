@@ -41,7 +41,7 @@ postsRouter.put('/:id', adminAuth, postValidationMiddleware, (req: Request, res:
     }
 })
 //Delete Post By ID + Auth
-postsRouter.delete('/:id', (req: Request, res: Response) => {
+postsRouter.delete('/:id',adminAuth, (req: Request, res: Response) => {
     const isDeleted = postsRepository.deletePost(+req.params.id)
     if (isDeleted) {
         res.send(204);

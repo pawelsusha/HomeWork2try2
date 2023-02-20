@@ -5,18 +5,17 @@ import {postsRouter} from "./routes/posts-router";
 import {posts, postsRepository} from "./repositories/posts-repository";
 import {blogs, blogsRepository} from "./repositories/blogs-repository";
 import {body} from "express-validator";
-import {authMiddleware} from "./MiddleWares/auth-middleware";
+import {adminAuth} from "./MiddleWares/auth-middleware";
 
 const app = express()
 const port = 3000
 const parserMiddleware = bodyParser({});
 app.use(parserMiddleware)
-app.use(authMiddleware)
+
 
 //app.use
-/*export const titleValidation = body('title').trim().isLength({min: 3, max: 10}).withMessage('ERORRR TITLE 3-10 MAX');
-export const basicAuth = require('express-basic-auth')
-export const adminAuth = basicAuth({users: { 'admin': 'qwerty' }});*/
+//export const titleValidation = body('title').trim().isLength({min: 3, max: 10}).withMessage('ERORRR TITLE 3-10 MAX');
+
 
 /*const authMiddleWare = (req:Request, res: Response, next: NextFunction ) => {
     if (req.query.token === "qwerty") {
@@ -27,7 +26,7 @@ export const adminAuth = basicAuth({users: { 'admin': 'qwerty' }});*/
 }*/
 
 //#1 Delete All Data OK+
-app.delete('/testing/all-data', (req:Request, res: Response ) => {
+app.delete('/testing/all-data',adminAuth, (req:Request, res: Response ) => {
     blogs.splice(0,blogs.length);
     posts.splice(0,posts.length);
     res.send(204);

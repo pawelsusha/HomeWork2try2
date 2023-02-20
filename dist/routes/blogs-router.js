@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.blogsRouter = void 0;
 const express_1 = require("express");
 const blogs_repository_1 = require("../repositories/blogs-repository");
+const auth_middleware_1 = require("../MiddleWares/auth-middleware");
 exports.blogsRouter = (0, express_1.Router)({});
 exports.blogsRouter.get('/', (req, res) => {
     const foundedBlogs = blogs_repository_1.blogsRepository.findBlogs(req.query.title
@@ -19,7 +20,7 @@ exports.blogsRouter.get('/', (req, res) => {
         res.send(404);
     }
 })
-    .delete('/:id', (req, res) => {
+    .delete('/:id', auth_middleware_1.adminAuth, (req, res) => {
     const id = +req.params.blogId;
     const isDeleted = blogs_repository_1.blogsRepository.deleteBlog(id);
     if (isDeleted) {
@@ -28,11 +29,11 @@ exports.blogsRouter.get('/', (req, res) => {
     else
         res.send(404);
 })
-    .post('/', (req, res) => {
+    .post('/', auth_middleware_1.adminAuth, (req, res) => {
     const newBlog = blogs_repository_1.blogsRepository.createBLog(req.body.title);
     res.status(201).send(newBlog);
 })
-    .put('/', (req, res) => {
+    .put('/', auth_middleware_1.adminAuth, (req, res) => {
     const id = +req.params.id;
     const title = req.body.name;
     const isUpdated = blogs_repository_1.blogsRepository.updateBlog(id, req.body.name);
