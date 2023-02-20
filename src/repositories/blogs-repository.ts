@@ -28,7 +28,12 @@ export const blogsRepository = {
     },
     getBlogsById(id: number) {
         let blog = blogs.find(b => b.id === id)
-        return blog;
+        if (blog) {
+            blog.id = id
+            return true;
+        } else {
+            return false;
+        }
 
     },
     createBLog(name: string) {
@@ -59,6 +64,4 @@ export const blogsRepository = {
         }
         return false
     }
-
-
 }

@@ -9,10 +9,12 @@ const blogs_router_1 = require("./routes/blogs-router");
 const posts_router_1 = require("./routes/posts-router");
 const posts_repository_1 = require("./repositories/posts-repository");
 const blogs_repository_1 = require("./repositories/blogs-repository");
+const auth_middleware_1 = require("./MiddleWares/auth-middleware");
 const app = (0, express_1.default)();
 const port = 3000;
 const parserMiddleware = (0, body_parser_1.default)({});
 app.use(parserMiddleware);
+app.use(auth_middleware_1.authMiddleware);
 //app.use
 /*export const titleValidation = body('title').trim().isLength({min: 3, max: 10}).withMessage('ERORRR TITLE 3-10 MAX');
 export const basicAuth = require('express-basic-auth')

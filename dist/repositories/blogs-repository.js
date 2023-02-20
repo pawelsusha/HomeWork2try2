@@ -26,8 +26,14 @@ exports.blogsRepository = {
         }
     },
     getBlogsById(id) {
-        let blog = exports.blogs.find(p => p.id === id);
-        return blog;
+        let blog = exports.blogs.find(b => b.id === id);
+        if (blog) {
+            blog.id = id;
+            return true;
+        }
+        else {
+            return false;
+        }
     },
     createBLog(name) {
         const newBlog = {
@@ -40,7 +46,7 @@ exports.blogsRepository = {
         return newBlog;
     },
     updateBlog(id, name) {
-        let blog = exports.blogs.find(p => p.id === id);
+        let blog = exports.blogs.find(b => b.id === id);
         if (blog) {
             blog.name = name;
             return true;

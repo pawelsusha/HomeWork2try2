@@ -5,12 +5,13 @@ import {postsRouter} from "./routes/posts-router";
 import {posts, postsRepository} from "./repositories/posts-repository";
 import {blogs, blogsRepository} from "./repositories/blogs-repository";
 import {body} from "express-validator";
+import {authMiddleware} from "./MiddleWares/auth-middleware";
 
 const app = express()
 const port = 3000
 const parserMiddleware = bodyParser({});
-
 app.use(parserMiddleware)
+app.use(authMiddleware)
 
 //app.use
 /*export const titleValidation = body('title').trim().isLength({min: 3, max: 10}).withMessage('ERORRR TITLE 3-10 MAX');
