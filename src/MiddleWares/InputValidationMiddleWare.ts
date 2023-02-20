@@ -1,9 +1,8 @@
-import { NextFunction } from "express";
-import { Response, Request } from "express";
-import { CustomValidator } from "express-validator/src/base";
+import { Response, Request, NextFunction  } from "express";
 import { blogs, blogsRepository } from "../repositories/blogs-repository";
 import { posts, postsRepository } from "../repositories/posts-repository";
-import { body, validationResult } from 'express-validator';
+import {body, CustomValidator, validationResult} from 'express-validator';
+import {Blog} from "../types/types";
 
 
 export  const findByIdBlogs : CustomValidator = value => {
@@ -13,13 +12,14 @@ export  const findByIdBlogs : CustomValidator = value => {
     }
     return true
 };
-
-
-
-/*export const inputValidationMiddleWare = (req: Request, res: Response, next: NextFunction) => {
+export const inputValidationMiddleWare = (req: Request,
+                                          res: Response,
+                                          next: NextFunction) => {
     const error = validationResult(req)
-    if (!error.isEmpty()) {
-        return res.status(400).send({
+    if (error.isEmpty()) {
+        next()
+    }else {
+        res.status(400).send({
             errorsMessages: error.array({onlyFirstError: true}).map(e => {
                 return {
                     message: e.msg,
@@ -28,8 +28,7 @@ export  const findByIdBlogs : CustomValidator = value => {
             })
         })
     }
-    next()
-}*/
+}
 export const blogValidationMiddleware = [
     body('name').trim().isLength({min: 1, max: 15}).isString(),
     body('description').trim().isLength({min: 1, max: 500}).isString(),
@@ -43,6 +42,6 @@ export const postValidationMiddleware = [
     body('title').trim().isLength({min:1, max: 30}).isString(),
     body('shortDescription').trim().isLength({min:1,max:100}).isString(),
     body('content').trim().isLength({min:1, max: 1000}).isString(),
-   // body('blogId').trim().custom(getBlogsById).isString()
+//    body('blogId').trim().custom(getBlogsById).isString()
 ];
 

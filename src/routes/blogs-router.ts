@@ -35,6 +35,7 @@ blogsRouter.get('/', (req:Request, res: Response ) => {
 })
 .post('/', (req:Request, res:Response) => {
     const newBlog = blogsRepository.createBLog(req.body.title)
+
     res.status(201).send(newBlog)
 })
 .put('/', (req:Request, res:Response) => {
